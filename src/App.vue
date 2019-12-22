@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <navbar v-if="true"/>
-    <navbar2 v-if="false"/>
+    <navbar v-if="isLoggedIn"/>
+    <navbar2 v-if="!isLoggedIn"/>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -19,6 +19,11 @@ export default {
   data(){
     return {
 
+    }
+  },
+  computed:{
+    isLoggedIn(){
+      return this.$store.getters.isLoggedIn;
     }
   }
 

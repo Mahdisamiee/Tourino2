@@ -42,16 +42,18 @@
                     route
                 >
                     <v-img
-                    :src="product.img"
+                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
                     height="200px"
                     ></v-img>
 
                     <v-card-title>
-                        {{product.title}}
+                        {{product.ptype}}
                     </v-card-title>
 
                     <v-card-subtitle>
-                        {{product.subtitle}}
+                        {{product.price}}
+                        <br/>
+                        {{product.count}}
                     </v-card-subtitle>
 
                     <v-card-actions>
@@ -64,25 +66,7 @@
                         >
                             Explore
                         </v-btn>
-                        <!-- <v-spacer></v-spacer>
-
-                        <v-btn
-                            icon
-                            @click="show = !show"
-                        >
-                            <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                        </v-btn> -->
                     </v-card-actions>
-
-                    <!-- <v-expand-transition>
-                        <div v-show="show">
-                            <v-divider></v-divider>
-
-                            <v-card-text>
-                            I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-                            </v-card-text>
-                        </div>
-                    </v-expand-transition> -->
                 </v-card>
             </v-flex>
         </v-layout>
@@ -96,21 +80,30 @@ export default {
             search : "",
             show: false,
             products:[
-                {name: "nothing", id: "1", img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", title: "Hello World", subtitle: "over than 1 million times"},
-                {name: "here you are", id: "2", img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", title: "here you are", subtitle: "over than 1 million times"},
-                {name: "never give uo", id: "3", img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", title: "there is no where", subtitle: "over than 1 million times"},
-                {name: "hello", id: "4", img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", title: "Vazvan", subtitle: "over than 1 million times"},
-                {name: "hi every one", id: "5", img: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", title: "Hello World", subtitle: "over than 1 million times"}
+                {name: "nothing", id: "1", img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", ptype: "agri", price: "100",count:"12"},
+                {name: "nothing", id: "2", img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", ptype: "agri", price: "100",count:"12"},
+                {name: "nothing", id: "3", img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", ptype: "agri", price: "100",count:"12"},
+                {name: "nothing", id: "4", img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", ptype: "agri", price: "100",count:"12"},
+                {name: "nothing", id: "5", img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", ptype: "agri", price: "100",count:"12"},
             ]
         }
     },
     methods:{
         goToDetails(id){
             this.$router.push(`product/${id}`);
+        },
+        fetchProducts(){
+            this.$store.dispatch('getProductsDetails')
+                .then(result => {
+                    this.products = result.products;
+                    // console.log(this.products);
+                })
+                .catch(() => {
+                })
         }
     },
     created(){
-        // we fetch data here using axios
+        this.fetchProducts();
     }
 }
 </script>

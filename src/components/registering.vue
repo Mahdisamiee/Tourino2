@@ -13,19 +13,19 @@
             </v-btn>
         </template>
         <div grid-list-xs>
-            <v-toolbar flat class="white">
+            <v-toolbar text class="white">
                 <v-toolbar-items>
                     <v-btn depressed class="primary--text white" @click="signin = true ,signup = false">ورود</v-btn>
                     <v-btn depressed class="primary--text white" @click="signin = false , signup = true">ثبت نام</v-btn>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
 
-                <v-btn small icon flat @click.prevent="dialog = false">
+                <v-btn small icon text @click.prevent="dialog = false">
                     <v-icon color="grey darken-1" small>mdi-close</v-icon>
                 </v-btn>
             </v-toolbar>
             <!-- Login Form -->
-            <v-card flat v-show="signin">
+            <v-card text v-show="signin">
                 <v-layout column justify-center align-center>
                     <v-flex xs12>
                         <v-card-title primary-title>
@@ -38,13 +38,13 @@
                         <v-text-field
                             label=" ایمیل "
                             v-model="login_email"
-                            :rules="[rules.required, rules.email]"
+                            
                             prepend-icon="mdi-email"
                         ></v-text-field>
                         <v-text-field
                             v-model="login_password"
                             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
+                            
                             :type="show ? 'text' : 'password'"
                             label="رمز عبور"
                             hint="At least 8 characters"
@@ -58,7 +58,7 @@
                 </v-card-text>
             </v-card>
             <!-- Sign up form -->
-            <v-card flat v-show="signup">
+            <v-card text v-show="signup">
                 <v-layout column justify-center align-center>
                     <v-flex xs12>
                         <v-card-title primary-title>
@@ -72,7 +72,7 @@
                         <v-text-field
                             v-model="signup_password"
                             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
+                            
                             :type="show ? 'text' : 'password'"
                             label="رمز عبور"
                             hint="At least 8 characters"
@@ -83,9 +83,10 @@
                         <v-text-field
                             label="ایمیل"
                             v-model="signup_email"
-                            :rules="[rules.required, rules.email]"
+                            
                             prepend-icon="mdi-email"
                         ></v-text-field>
+                        <v-checkbox label="مایل به دریافت اخبارم" v-model="news"></v-checkbox>
                         <v-spacer></v-spacer>
                         <v-btn depressed small class="orange darken-1 white--text mt-3 mb-0 ml-0" @click="register()" >تائید</v-btn>
                     </v-form>
@@ -136,7 +137,7 @@ export default {
             signup_password:'',
             signup_email:'',
             login_type: null,
-
+            news: false,
             
 
         }
@@ -147,29 +148,31 @@ export default {
                 email: this.login_email,
                 password: this.login_password
             }
-            this.$store.dispatch('login', userInfo)
+            this.$store.dispatch('Login', userInfo)
                 .then(() => {
-                    //console.log(result)
-                    this.$router.push('/dashboard')
+                    // console.log(result)
+                    //this.$router.push('/dashboard')
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(() => {
+                    
                 })
         },
         register(){
             const userInfo = {
-                user_name : this.user_name,
+                username : this.user_name,
                 email : this.signup_email,
                 password :this.signup_password,
-                signup_type: this.signup_type
+                phone: "+98" ,
+                news:this.news // its should be add;
+                //signup_type: this.signup_type
             }
-            this.$store.dispatch('register', userInfo)
+            this.$store.dispatch('Register', userInfo)
                 .then(() => {
-                   // console.log(result) // for debugging
-                    this.$router.push(`/dashboard/${this.signup_type}/step1`)
+                    // console.log(result) // for debugging
+                   // this.$router.push(`/dashboard/${this.signup_type}/step1`)
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(() => {
+                    // console.log(err)
                 })
         }
     }

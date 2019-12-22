@@ -19,7 +19,7 @@
                 background-color="white"
                 hide-details
             ></v-text-field>
-            <v-btn id="search-btn" large flat icon class="ml-4">
+            <v-btn id="search-btn" large text icon class="ml-4">
                 <v-icon  class="white--text" medium>mdi-magnify</v-icon>
             </v-btn>
         </v-layout>

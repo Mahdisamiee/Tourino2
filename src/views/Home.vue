@@ -231,7 +231,7 @@ main{
 }
 
 .pimg1{
-    background-image: url("../assets/sunrise.jpg");
+    background-image: url("../assets/plane.jpg");
     min-height: 670px;
 }
 .pimg2{
@@ -283,6 +283,5 @@ main{
     display: grid;
     justify-items: center;
     margin-top: 20px;
-
 }
 </style>

@@ -9,9 +9,13 @@ export default new Vuex.Store({
     status : '',
     token : localStorage.getItem('token') || '',
     user : {},
+
+    shop_cart : 0
   },
   mutations: {
-
+    addShopCart(state){
+      state.shop_cart++;
+    },
     auth_request(state){
       state.status = 'loading'
     },
@@ -38,7 +42,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request')
         axios({
-          url: 'localhost:3000/login',
+          url: 'http://192.168.171.1:8585/user/login',
           data: user,
           method: 'POST'
         })
@@ -62,7 +66,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request')
         axios({
-          url: 'localhost:3000/register',
+          url: 'http://192.168.171.1:8585/user/register',
           data: user,
           method: 'Post'
         })
@@ -90,11 +94,106 @@ export default new Vuex.Store({
         resolve()
       })
     },
+    addShopCart({commit}){
+      commit('addShopCart')
+    },
+    // -----------------------------------------------------------------------
+    getProductDetails({commit}, id){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/product/fulldetails/${id}`,
+          method: "GET"
+        })
+        .then(resp => {
+          resolve(resp.data);
+          console.log("hahah")
+        })
+        .catch(err =>{
+          reject(err);
+          console.log("nahhannn")
+        })
+      })
+    },
+    getTourDetails({commit}, id){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/tour/fulldetails/${id}`,
+          method: "GET"
+        })
+        .then(resp => {
+          resolve(resp.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+    },
+    getBlogDetails({commit}, id){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/blog/fulldetails/${id}`,
+          method: "GET"
+        })
+        .then(resp => {
+          resolve(resp.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+    },
+
+
+//----------------- get all data -------------------------------
+    getProductsDetails({commit}){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/products`,
+          method: 'GET'
+        })
+        .then(resp => {
+          resolve(resp.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+    },
+    getToursDetails({commit}){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/tours`,
+          method: 'GET'
+        })
+        .then(resp => {
+          resolve(resp.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+    },
+    getBlogsDetails({commit}){
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `http://192.168.171.1:8585/blogs`,
+          method: 'GET'
+        })
+        .then(resp => {
+          resolve(resp.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+    }
+    
   },
   getters: {
     isLoggedIn: state => !!state.token, 
     authStatus: state => !!state.status,
-    user: state => state.user
+    user: state => state.user,
+    shop_cart: state => state.shop_cart
   },
 
 

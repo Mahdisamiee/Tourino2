@@ -1,25 +1,30 @@
 <template>
     <main class="mt-5">
         <div class="topheader grey lighten-4 py-4">
+            <div class="back-btn-box">
+                <v-btn color="black--text " @click="back" icon>
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+            </div>
             <v-container grid-list-lg>
                 <v-layout row wrap class="pa-3">
 
                     <v-flex xs12 sm6>
                         <v-layout column>
                             <div class="header mb-5">
-                                <img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" width="500px" height="300px" alt="">
+                                <img :src="tour_details.img" width="500px" height="300px" alt="">
                                 <h2 class="title">
-                                    {{product_details2.name}}
+                                    {{tour_details.title}}
                                 </h2>
                             </div>
                             <div class="condition my-3">
                                 وضعیت:
-                                <v-chip outlined class="mx-4 white--text font-weight-bold" :color="product_details2.condition.color" >{{product_details2.condition.situation}}</v-chip>
-                                <!-- <p >ایجاد شده توسط:<span class="mx-4 primary--text">{{product_details.creator}}</span></p> -->
+                                <v-chip outlined class="mx-4 white--text font-weight-bold" :color="tour_details.condition.color" >{{tour_details.condition.situation}}</v-chip>
+                                <!-- <p >ایجاد شده توسط:<span class="mx-4 primary--text">{{tour_details.creator}}</span></p> -->
                             </div>
                             <div class="offers_count">
-                                <span class="display-1 grey--text text--darken-4">{{product_details2.count}}</span>
-                                <p>موجودی</p>
+                                <span class="display-1 grey--text text--darken-4">5</span>
+                                <p>ظرفیت باقی مانده</p>
                             </div>
                         </v-layout>
                     </v-flex>
@@ -27,7 +32,7 @@
                     <v-flex xs12 sm6>
                         <v-layout column class="pa-5">
                             <div class="btn_box">
-                                <v-btn text class="btn1 orange darken-1 mr-2 ml-1" @click="add_Shop_Cart">افزودن به سبد خرید</v-btn>
+                                <v-btn text class="btn1 orange darken-1 mr-2 ml-1" @click="add_Shop_Cart">رزرو</v-btn>
                                 <v-btn text class="btn2 orange darken-1">
                                     <v-icon>mdi-dots-horizontal</v-icon>
                                 </v-btn>
@@ -54,16 +59,16 @@
             <v-container grid-list-lg>
                 <v-layout row wrap>
                     <v-flex xs12 sm8 py-3 pl-5>
-                        <h3 class="title mb-4">توضیحات محصول:</h3>
-                        <p>{{product_details2.description}}</p>
+                        <h3 class="title mb-4">توضیحات تور:</h3>
+                        <p>{{tour_details.description}}</p>
                     </v-flex>
                     <v-flex xs12 sm4>
                         <div class="budget my-3">
-                            <v-chip class="grey darken-3 white--text" ><span class="ml-2">قیمت:</span>{{product_details2.price}} تومان</v-chip>
+                            <v-chip class="grey darken-3 white--text" ><span class="ml-2">قیمت:</span>{{tour_details.min_cost}} - {{tour_details.max_cost}} تومان</v-chip>
                         </div>
                         <div class="skills_box mt-5">
-                            <p>دسته بندی محصول</p>
-                            <v-chip class="mx-1 light-blue darken-1 grey--text" outlined>{{product_details2.ptype}}</v-chip>
+                            <p>تور های مشابه :</p>
+                            <v-chip class="mx-1 light-blue darken-1 grey--text" v-for="(i,index) in tour_details.related_tours" :key="index" outlined>{{i}}</v-chip>
                         </div>
                     </v-flex>
 
@@ -73,10 +78,10 @@
                         <v-layout row wrap>
 
                             <v-flex xs12>
-                                <p class="title">افرادی که از این محصول استفاده کرده اند</p>
+                                <p class="title">افرادی که در این تور شرکت کرده اند</p>
                             </v-flex>
                             
-                            <v-flex xs12 sm4 md3 v-for="offer in product_details2.comments" :key="offer.id">
+                            <v-flex xs12 sm4 md3 v-for="offer in tour_details.other_buyers" :key="offer.id">
                                 <div class="person_card">
                                     <div class="person_offer">
                                         <div class="offer_pic">
@@ -89,8 +94,8 @@
                                             </v-avatar>
                                         </div>
                                         <div class="offer_details">
-                                            <p class="title">{{offer.username}}</p>
-                                            <span>{{offer.comment}}.</span>
+                                            <p class="title">{{offer.name}}</p>
+                                            <span>{{offer.execution_time}} روز پیش</span>
                                         </div>
                                     </div>
                                     <div class="person_rate">
@@ -122,50 +127,33 @@ export default {
             // project url and clipboard
             page_url: `https://www.tourino.com${this.$route.path}`,
             // project details
-            // product_details: {                           // product details that are not use for this project
-            //     name: 'کاکتوس فرد اعلا',
-            //     img: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg',
-            //     condition: {
-            //         color: 'green',
-            //         situation: 'موجود'
-            //     },
-            //     description: 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.',
-            //     min_cost: 5000,
-            //     max_cost: 9000,
-            //     related_product: [
-            //         'موز','خیار','کدو تنبل','قارچ'
-            //     ],
-            //     other_buyers:[
-            //         {id: '1', img: '', name: 'Mahdi', execution_time: '30', rate: 5},
-            //         {id: '2', img: '', name: 'Hasan', execution_time: '40', rate: 4},
-            //         {id: '3', img: '', name: 'Reza', execution_time: '10', rate: 2},
-            //         {id: '4', img: '', name: 'PGR0101', execution_time: '45', rate: 1},
-            //         {id: '5', img: '', name: 'Thread', execution_time: '60', rate: 0},
-            //     ]
-            // }
-            product_details2: {
-                name: "nothing", 
-                id: "1", 
+            tour_details: {
+                title: 'تور ویژه گرجستان',
+                img: 'https://cdn.vuetifyjs.com/images/cards/cooking.png',
                 condition: {
                     color: 'green',
                     situation: 'موجود'
                 },
-                img_url: "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg", 
-                ptype: "agri",
-                price: "100",
-                count:"12",
-                description: "",
-                comments: [
-                    {
-                        rate: 0,
-                        comment: "",
-                        username: "",
-                    }
+                description: 'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.',
+                min_cost: 5000,
+                max_cost: 9000,
+                related_tours: [
+                    'گرجستان', 'ارمنستان', 'تاجیکستان', 'وزوان'
+                ],
+                other_buyers:[
+                    {id: '1', img: '', name: 'Mahdi', execution_time: '30', rate: 5},
+                    {id: '2', img: '', name: 'Hasan', execution_time: '40', rate: 4},
+                    {id: '3', img: '', name: 'Reza', execution_time: '10', rate: 2},
+                    {id: '4', img: '', name: 'PGR0101', execution_time: '45', rate: 1},
+                    {id: '5', img: '', name: 'Thread', execution_time: '60', rate: 0},
                 ]
             }
         }
     },
     methods:{
+        back(){
+            this.$router.push('/tours')
+        },
         copyClipboard(){
             let copyvar = document.querySelector("#copy_clipboard");
             copyvar.select();
@@ -174,21 +162,19 @@ export default {
 
         add_Shop_Cart(){
             this.$store.dispatch('addShopCart');
-            this.$router.push(`/products`);
+            this.$router.push(`/tours`);
         },
 
         fetchProjectDetails(){
             const id = this.$route.params.id
-            this.$store.dispatch('getProductDetails', id)
+            this.$store.dispatch('getTourDetails', id)
                 .then(result => {
-                    this.product_details2 = result.products;
-                    // console.log(this.product_details2);
+                    this.tour_details = result.tour_details;//result contains from 4 object + value text isSuccess
                 })
-                .catch(() => {
+                .catch(err => {
                     // this.result.value = true;
                     // this.result.text = "مشکلی در سرور پیش آمده است.";
                     // this.result.isSuccess = "error";
-                    
                 })
         }
     },
@@ -199,7 +185,12 @@ export default {
 </script>
 
 <style scoped>
-
+.back-btn-box{
+    display: grid;
+    align-items: end;
+    justify-items: left;
+    padding: 5px 20px; 
+}
 .condition{
     display: flex;
     flex-direction: row;
